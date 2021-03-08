@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset='utf-8'>
+	<meta name='viewport' content='width=device-width,initial-scale=1'>
+
+	<title>RotMG Sprite Previewer</title>
+
+	<link rel='icon' type='image/png' href='./favicon.png'>
+	<link rel='stylesheet' href='./global.css'>
+	<link rel='stylesheet' href='./build/bundle.css'>
+
+	<script defer src='./build/bundle.js'></script>
+
+	<script type="glsl/vertex" id="vertex-shader">
+		precision highp float;
+
+		attribute vec2 aVertexPosition;
+		attribute vec2 aUVPosition;
+
+		varying vec2 vUVPosition;
+		
+		void main() {
+			gl_Position = vec4(aVertexPosition, 0, 1);
+			vUVPosition = aUVPosition;
+		}
+	</script>
+
+	<script type="glsl/fragment" id="fragment-shader">
+		precision highp float;
+
+		varying vec2 vUVPosition;
+
+		uniform sampler2D uSpriteTexture;
+		uniform sampler2D uMaskTexture;
+		uniform sampler2D uClothingTexture;
+		uniform sampler2D uAccessoryTexture;
+
+		uniform float uTextureScalar;
+
+		void main() {
+			vec4 color = texture2D(uSpriteTexture, vUVPosition);
+			vec4 maskColor = texture2D(uMaskTexture, vUVPosition);
+			vec4 clothingColor = texture2D(uClothingTexture, vec2(gl_FragCoord.xy) / 16.0);
+			vec4 accessoryColor = texture2D(uAccessoryTexture, vec2(gl_FragCoord.xy) / 16.0);
+
+			if (maskColor.a > 0.01) {
+				if (maskColor.r > 0.01 && clothingColor.a > 0.01) {
+					color = maskColor.rrra * clothingColor;
+				} else if (maskColor.g > 0.01 && accessoryColor.a > 0.01) {
+					color = maskColor.ggga * accessoryColor;
+				}
+			}
+			gl_FragColor = color;
+		}
+	</script>
+</head>
+
+<body>
+</body>
+</html>
