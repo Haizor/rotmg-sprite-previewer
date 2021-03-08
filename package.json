@@ -10,7 +10,7 @@
     "start": "electron-forge start",
     "start:web": "sirv public",
     "validate": "svelte-check",
-    "package": "electron-forge package",
+    "package": "npm run build && electron-forge package",
     "make": "electron-forge make"
   },
   "devDependencies": {
