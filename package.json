@@ -1,5 +1,6 @@
 {
   "name": "rotmg-sprite-previewer",
+  "productName": "RotMG Sprite Previewer",
   "description": "A tool for RotMG that allows you to preview how sprites will look in the actual game.",
   "author": "Haizor",
   "version": "1.0.0",
@@ -11,6 +12,7 @@
     "start:web": "sirv public",
     "validate": "svelte-check",
     "package": "npm run build && electron-forge package",
+    "package:all": "npm run build && electron-forge package && electron-forge package --platform linux",
     "make": "electron-forge make"
   },
   "devDependencies": {
